@@ -19,7 +19,7 @@ namespace PostCodeSearch
         private IPostCodeRepository _postCodeRepository;
 
         /// <summary>
-        /// A simple function that takes a string and does a ToUpper
+        /// A simple function that takes a string parameter and gives all postal codes based on user input
         /// </summary>
         /// <param name="request"></param>
         /// <param name="context"></param>

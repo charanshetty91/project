@@ -1,78 +1,86 @@
 import { useState } from 'react';
 import './App.css';
 import axios from 'axios';
-//import _ from 'lodash';
+import _ from 'lodash';
+import Header from './component/header';
+import ResultTable from './component/result-table'
 
 function App() {
   const [value, setValue] = useState("");
   const [searchInCompleteData, setSearchInCompleteData] = useState([]);
   const [postCodeFullDetails, setPostCodeFullDetails] = useState('');
-  
-  const onChange = (event) => {   
-     axios.get('https://65d6inxrkb.execute-api.eu-central-1.amazonaws.com/prod?partialId=' + event.target.value)
-      .then(res => {console.log("result data:"+res.data);  setSearchInCompleteData(res.data) });
+  const [resultLabel,setResultLabel]=useState('');
+  const [details, setDetails] = useState('Details');
+
+  const onChange = (event) => {
+    axios.get('https://65d6inxrkb.execute-api.eu-central-1.amazonaws.com/prod?partialId=' + event.target.value)
+      .then(res => { console.log("result data:" + res.data); setSearchInCompleteData(res.data) }).catch((er)=>{
+        setSearchInCompleteData([]);
+      });
+    setResultLabel("loading...")
     setValue(event.target.value);
   }
+
   const onSearch = (searchText) => {
-    console.log(searchText);
-    try{
-    axios.get('/stg?id=' + searchText)
-      .then(res => {setPostCodeFullDetails(res.data); });
+    setSearchInCompleteData([]);
+    setResultLabel("")    
+    try {
+      axios.get('https://vg8zvzdlo5.execute-api.eu-central-1.amazonaws.com/prod?id=' + searchText)
+        .then(res => { setDetails('Details'); setPostCodeFullDetails(res.data); }).catch((err)=>{
+          setDetails('No data found')
+          setPostCodeFullDetails('');
+          
+        });
     }
-    catch(error)
-    {
+    catch (error) {
+      setPostCodeFullDetails('');
       console.error(error);
-    }  
+    }
   }
 
   const onSearchItemClick = (item) => {
+    setResultLabel("")
     setValue(item);
     setSearchInCompleteData([]);
 
   }
-const searchResult = searchInCompleteData.length ? 
-searchInCompleteData.map((item,index)=>{
-  return(<div key={index} onClick={() => onSearchItemClick(item)} className="dropdown-row">{item}</div>)
-}) 
-: ( <div className="center"> search record ...</div>)
-
+  const searchResult = searchInCompleteData.length ?
+    searchInCompleteData.map((item, index) => {
+      return (<div className="collection-item"  key={index} onClick={() => onSearchItemClick(item)} >{item}</div>)
+    })
+    : <label>{resultLabel}</label>
 
   return (
 
     <div className="App">
-
-      <nav>
-        <div className="nav-wrapper">
-          <ul id="nav-mobile" className="hide-on-med-and-down">
-            <li>Postal code Search:</li>
-          </ul>
-        </div>
-      </nav>
+      <Header/>
       <div className='search-container'>
-        <div className='search-inner'>
-          <input type="text" value={value} onChange={onChange} />
-          <button onClick={() => onSearch(value)}>Search </button>
-        </div>
-        
-        <div className='dropdown'>
-          {
-          searchResult          
-          // _.isNull(searchInCompleteData) && searchInCompleteData.map((item, index) => (<div key={index} onClick={() => onSearchItemClick(item)} className="dropdown-row">{item}</div>))
-          }
-        </div>
-        {postCodeFullDetails.country !== "" && (<div className='tbl-postcode'>
-          <div>Post Details</div>
-          <div>Country:{postCodeFullDetails.Country}</div>
-          <div>Region:{postCodeFullDetails.Region}</div>
-          <div>AdminDistrict:{postCodeFullDetails.AdminDistrict}</div>
-          <div>ParliamentaryConstituency:{postCodeFullDetails.ParliamentaryConstituency}</div>
-          <div>Area:{postCodeFullDetails.Area}</div>
-        </div>)
-        }
+        <div className="row">
+          <div className="input-field col s6">
+            <input value={value} onChange={onChange} id="postal_code" type="text" className="validate" />
+            <label className="active">Enter postal code here...</label>
+            <div className='col s2 collection'>
+            {
+              searchResult
+            }
+          </div>
 
+          <div className='left col s10'>
+            {!_.isEmpty(postCodeFullDetails.Country) && (<div className='left tbl-postcode'>
+              <div className='card-panel teal '>{details}</div>
+              <ResultTable postCodeFullDetails ={postCodeFullDetails}/>
+                    
+            </div>)
+            }
+          </div>
+          </div>
+          <div className='input-field col s6'>
+            <button className='left search-btn waves-effect waves-light btn' onClick={() => onSearch(value)}>Search details </button>
+          </div>
+
+        </div>
+       
       </div>
-     
-
     </div>
   );
 }

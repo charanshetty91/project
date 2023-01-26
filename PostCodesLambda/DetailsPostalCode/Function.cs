@@ -19,7 +19,7 @@ namespace DetailsPostalCode
         private IPostCodeRepository _postCodeRepository;
 
         /// <summary>
-        /// A simple function that takes a string and does a ToUpper
+        /// A simple function that takes a string and gives full 
         /// </summary>
         /// <param name="input"></param>
         /// <param name="context"></param>
