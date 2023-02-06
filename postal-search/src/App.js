@@ -56,16 +56,16 @@ function App() {
       <Header/>
       <div className='search-container'>
         <div className="row">
-          <div className="input-field col s6">
+          <div className="input-field col s7">
             <input value={value} onChange={onChange} id="postal_code" type="text" className="validate" />
             <label className="active">Enter postal code here...</label>
-            <div className='col s2 collection'>
+            <div className='col s3 collection'>
             {
               searchResult
             }
           </div>
 
-          <div className='left col s10'>
+          <div className='left col s9 table-resposive'>
             {!_.isEmpty(postCodeFullDetails.Country) && (<div className='left tbl-postcode'>
               <div className='card-panel teal '>{details}</div>
               <ResultTable postCodeFullDetails ={postCodeFullDetails}/>
@@ -74,7 +74,7 @@ function App() {
             }
           </div>
           </div>
-          <div className='input-field col s6'>
+          <div className='input-field col s5'>
             <button className='left search-btn waves-effect waves-light btn' onClick={() => onSearch(value)}>Search details </button>
           </div>
 
