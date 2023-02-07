@@ -13,11 +13,11 @@ function ResultTable({postCodeFullDetails}) {
 
                 <tbody>
                   <tr>
-                    <td>{postCodeFullDetails.Country}</td>
-                    <td>{postCodeFullDetails.Region}</td>
-                    <td>{postCodeFullDetails.AdminDistrict}</td>
-                    <td>{postCodeFullDetails.ParliamentaryConstituency}</td>
-                    <td>{postCodeFullDetails.Area}</td>
+                    <td>{postCodeFullDetails.country}</td>
+                    <td>{postCodeFullDetails.region}</td>
+                    <td>{postCodeFullDetails.adminDistrict}</td>
+                    <td>{postCodeFullDetails.parliamentaryConstituency}</td>
+                    <td>{postCodeFullDetails.area}</td>
                   </tr>
                 </tbody>
               </table> 

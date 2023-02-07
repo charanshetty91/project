@@ -13,8 +13,8 @@ function App() {
   const [details, setDetails] = useState('Details');
 
   const onChange = (event) => {
-    axios.get('https://65d6inxrkb.execute-api.eu-central-1.amazonaws.com/prod?partialId=' + event.target.value)
-      .then(res => { console.log("result data:" + res.data); setSearchInCompleteData(res.data) }).catch((er)=>{
+    axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/LookupPostcode/' + event.target.value)  
+      .then(res => {setSearchInCompleteData(res.data) }).catch((er)=>{
         setSearchInCompleteData([]);
       });
     setResultLabel("loading...")
@@ -25,7 +25,7 @@ function App() {
     setSearchInCompleteData([]);
     setResultLabel("")    
     try {
-      axios.get('https://vg8zvzdlo5.execute-api.eu-central-1.amazonaws.com/prod?id=' + searchText)
+      axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/GetAutoCompletePartialPostCode/' + searchText)
         .then(res => { setDetails('Details'); setPostCodeFullDetails(res.data); }).catch((err)=>{
           setDetails('No data found')
           setPostCodeFullDetails('');
@@ -66,7 +66,7 @@ function App() {
           </div>
 
           <div className='left col s9 table-resposive'>
-            {!_.isEmpty(postCodeFullDetails.Country) && (<div className='left tbl-postcode'>
+            {!_.isEmpty(postCodeFullDetails.country) && (<div className='left tbl-postcode'>
               <div className='card-panel teal '>{details}</div>
               <ResultTable postCodeFullDetails ={postCodeFullDetails}/>
                     
