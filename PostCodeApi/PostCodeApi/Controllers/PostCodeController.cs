@@ -26,7 +26,7 @@ namespace PostCodeApi.Controllers
         /// <summary>
         /// Lookup a postcode
         /// </summary>
-        /// <param name="partialId"></param>
+        /// <param name="partialId">partial Id</param>
         /// <returns></returns>
         [HttpGet]
         [Route("LookupPostcode/{partialId}")]
@@ -57,11 +57,11 @@ namespace PostCodeApi.Controllers
                 return NotFound($"Error :Please contact administrator ");
             }
         }
-        
+
         /// <summary>
         /// the “Autocomplete a postcode partial”
         /// </summary>
-        /// <param name="partialId"></param>
+        /// <param name="fullPostId">full PostCode Id</param>
         /// <returns></returns>
         [HttpGet]
         [Route("GetAutoCompletePartialPostCode/{fullPostId}")]
