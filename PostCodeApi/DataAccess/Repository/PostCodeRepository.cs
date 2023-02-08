@@ -11,7 +11,12 @@ namespace DataAccess.Repository
 {
    public class PostCodeRepository : IPostCodeRepository
    {
-       public async Task<PostCodeList> GetAllPostalCodeListById(string partialId)
+        /// <summary>
+        /// This method is used to get partial post code results.
+        /// </summary>
+        /// <param name="partialId">partial Id</param>
+        /// <returns></returns>
+        public async Task<PostCodeList> GetAllPostalCodeListById(string partialId)
        {
            var client = new HttpClient();
            var apiLink = "https://api.postcodes.io/postcodes/";
@@ -23,7 +28,12 @@ namespace DataAccess.Repository
            return postCodeList;
        }
 
-       public async Task<PostCodeData> GetPostCodeById(string fullId)
+        /// <summary>
+        /// This actions is used to get valid Post code details 
+        /// </summary>
+        /// <param name="fullId">full Id</param>
+        /// <returns></returns>
+        public async Task<PostCodeData> GetPostCodeById(string fullId)
        {
 
            var client = new HttpClient();
@@ -36,7 +46,12 @@ namespace DataAccess.Repository
            return postCodeData;
        }
 
-       public string GetArea(double latitude)
+        /// <summary>
+        /// This action used to get area details based on latitude
+        /// </summary>
+        /// <param name="latitude">latitude</param>
+        /// <returns></returns>
+        public string GetArea(double latitude)
        {
            if (latitude < 52.229466) return "South";
            if (latitude >= 53.27169) return "North";

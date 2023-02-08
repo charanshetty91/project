@@ -6,7 +6,7 @@
         "dotnet lambda help",
         "All the command line options for the Lambda command can be specified in this file."
     ],
-    "profile"     : "testapi",
+    "profile"     : "PostCodeApi",
     "region"      : "eu-central-1",
     "configuration" : "Release",
     "framework"     : "netcoreapp3.1",
@@ -14,5 +14,5 @@
     "template"      : "serverless.template",
     "template-parameters" : "",
     "stack-name"          : "LambdaWebAPI01",
-    "s3-bucket"           : "testapi-91"
+    "s3-bucket"           : "post-code-lambda-trigger"
 }

@@ -12,6 +12,9 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace PostCodeApi.Tests
 {
+    /// <summary>
+    /// For each api 3 different scenarios are taken care in this post code test class
+    /// </summary>
     public class PostCodeControllerTests
     {
 
