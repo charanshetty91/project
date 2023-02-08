@@ -36,21 +36,26 @@ namespace PostCodeApi.Controllers
             {
                 LambdaLogger.Log("LookupPostcode search started !!");
                 var data = await _postCodeRepository.GetAllPostalCodeListById(partialId);
+                if (data.result == null)
+                {
+                    LambdaLogger.Log($"no data for current search");
+                    return NotFound("no data found");
+                }
                 if (data.result.Count > 0)
                 {
-                    LambdaLogger.Log($"query param name: {data}");
+                    LambdaLogger.Log($"search data found!!");
                     GetResponseHeader2Client();
                     return Ok(data.result);
                 }
+                return NotFound("no data found");
             }
 
             catch (Exception ex)
             {
-                LambdaLogger.Log("Error in GetAllPostalCodeListById API");
+                LambdaLogger.Log("Error in LookupPostcode API");
                 LambdaLogger.Log("Error details:" + ex.StackTrace);
-              
+                return NotFound($"Error :Please contact administrator ");
             }
-            return NotFound("no data found");
         }
         
         /// <summary>
@@ -64,28 +69,28 @@ namespace PostCodeApi.Controllers
         {
             try
             {
-
-
                 var data = await _postCodeRepository.GetPostCodeById(fullPostId);
                 if (data.status == 200)
                 {
                     PostCode postCode = new PostCode()
                     {
-                        Country = data.result.country,
-                        AdminDistrict = data.result.admin_district,
-                        ParliamentaryConstituency = data.result.parliamentary_constituency,
-                        Region = data.result.region,
-                        Area = _postCodeRepository.GetArea(data.result.latitude)
+                        country = data.result.country,
+                        adminDistrict = data.result.admin_district,
+                        parliamentaryConstituency = data.result.parliamentary_constituency,
+                        region = data.result.region,
+                        area = _postCodeRepository.GetArea(data.result.latitude)
                     };
 
 
                     GetResponseHeader2Client();
                     return Ok(postCode);
                 }
-                return NotFound($"No Data found with this Id : {fullPostId} ");
+                return NotFound($"No Data found with this code ");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
+                LambdaLogger.Log("Error in AutocompletePostcodePartial API");
+                LambdaLogger.Log("Error Details:"+ex.StackTrace);
                 return NotFound($"Error :Please contact administrator ");
             }
         }

@@ -8,10 +8,10 @@ namespace DataAccess.Model
 {
     public class PostCode
     {
-        public string Country { get; set; }
-        public string Region { get; set; }
-        public string AdminDistrict { get; set; }
-        public string ParliamentaryConstituency { get; set; }
-        public string Area { get; set; }
+        public string country { get; set; }
+        public string region { get; set; }
+        public string adminDistrict { get; set; }
+        public string parliamentaryConstituency { get; set; }
+        public string area { get; set; }
     }
 }

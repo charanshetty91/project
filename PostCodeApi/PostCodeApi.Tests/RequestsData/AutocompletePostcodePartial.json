@@ -1,0 +1,106 @@
+[
+
+  {
+    "resource": "/{proxy+}",
+    "path": "/api/PostCode/GetAutoCompletePartialPostCode/RG10 0AA",
+    "httpMethod": "GET",
+    "headers": null,
+    "queryStringParameters": null,
+    "pathParameters": {
+      "proxy": "api/PostCode/GetAutoCompletePartialPostCode/RG10 0AA"
+    },
+    "stageVariables": null,
+    "requestContext": {
+      "accountId": "AAAAAAAAAAAA",
+      "resourceId": "5agfss",
+      "stage": "test-invoke-stage",
+      "requestId": "test-invoke-request",
+      "identity": {
+        "cognitoIdentityPoolId": null,
+        "accountId": "AAAAAAAAAAAA",
+        "cognitoIdentityId": null,
+        "caller": "BBBBBBBBBBBB",
+        "apiKey": "test-invoke-api-key",
+        "sourceIp": "test-invoke-source-ip",
+        "cognitoAuthenticationType": null,
+        "cognitoAuthenticationProvider": null,
+        "userArn": "arn:aws:iam::AAAAAAAAAAAA:root",
+        "userAgent": "Apache-HttpClient/4.5.x (Java/1.8.0_102)",
+        "user": "AAAAAAAAAAAA"
+      },
+      "resourcePath": "/{proxy+}",
+      "httpMethod": "GET",
+      "apiId": "t2yh6sjnmk"
+    },
+    "body": null
+  },
+
+  {
+    "resource": "/{proxy+}",
+    "path": "/api/PostCode/GetAutoCompletePartialPostCode/ ",
+    "httpMethod": "GET",
+    "headers": null,
+    "queryStringParameters": null,
+    "pathParameters": {
+      "proxy": "api/PostCode/GetAutoCompletePartialPostCode/ "
+    },
+    "stageVariables": null,
+    "requestContext": {
+      "accountId": "AAAAAAAAAAAA",
+      "resourceId": "5agfss",
+      "stage": "test-invoke-stage",
+      "requestId": "test-invoke-request",
+      "identity": {
+        "cognitoIdentityPoolId": null,
+        "accountId": "AAAAAAAAAAAA",
+        "cognitoIdentityId": null,
+        "caller": "BBBBBBBBBBBB",
+        "apiKey": "test-invoke-api-key",
+        "sourceIp": "test-invoke-source-ip",
+        "cognitoAuthenticationType": null,
+        "cognitoAuthenticationProvider": null,
+        "userArn": "arn:aws:iam::AAAAAAAAAAAA:root",
+        "userAgent": "Apache-HttpClient/4.5.x (Java/1.8.0_102)",
+        "user": "AAAAAAAAAAAA"
+      },
+      "resourcePath": "/{proxy+}",
+      "httpMethod": "GET",
+      "apiId": "t2yh6sjnmk"
+    },
+    "body": null
+  },
+  {
+    "resource": "/{proxy+}",
+    "path": "/api/PostCode/GetAutoCompletePartialPostCode/W23 -",
+    "httpMethod": "GET",
+    "headers": null,
+    "queryStringParameters": null,
+    "pathParameters": {
+      "proxy": "api/PostCode/GetAutoCompletePartialPostCode/W23 -"
+    },
+    "stageVariables": null,
+    "requestContext": {
+      "accountId": "AAAAAAAAAAAA",
+      "resourceId": "5agfss",
+      "stage": "test-invoke-stage",
+      "requestId": "test-invoke-request",
+      "identity": {
+        "cognitoIdentityPoolId": null,
+        "accountId": "AAAAAAAAAAAA",
+        "cognitoIdentityId": null,
+        "caller": "BBBBBBBBBBBB",
+        "apiKey": "test-invoke-api-key",
+        "sourceIp": "test-invoke-source-ip",
+        "cognitoAuthenticationType": null,
+        "cognitoAuthenticationProvider": null,
+        "userArn": "arn:aws:iam::AAAAAAAAAAAA:root",
+        "userAgent": "Apache-HttpClient/4.5.x (Java/1.8.0_102)",
+        "user": "AAAAAAAAAAAA"
+      },
+      "resourcePath": "/{proxy+}",
+      "httpMethod": "GET",
+      "apiId": "t2yh6sjnmk"
+    },
+    "body": null
+  }
+]
