@@ -3,19 +3,18 @@ using DataAccess.Model;
 using DataAccess.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 
 namespace PostCodeApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowOrigin")]
     public class PostCodeController : ControllerBase
     {
-
-
-        private IPostCodeRepository _postCodeRepository;
-        private ILambdaContext context;
-
+        private readonly IPostCodeRepository _postCodeRepository;
 
         public PostCodeController(IPostCodeRepository postCodeRepository)
         {
@@ -29,13 +28,14 @@ namespace PostCodeApi.Controllers
         /// <param name="partialId">partial Id</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("LookupPostcode/{partialId}")]
-        public async Task<IActionResult> LookupPostcode([FromRoute] string partialId)
+        [Route("LookupPostcode/{PartialId:minlength(1)}/{MaxResultCount:int}")]
+        public async Task<IActionResult> LookupPostcode([FromRoute] LookupPostcodeRouteParameter parms)
         {
             try
             {
                 LambdaLogger.Log("LookupPostcode search started !!");
-                var data = await _postCodeRepository.GetAllPostalCodeListById(partialId);
+                var data = await _postCodeRepository.GetAllPostalCodeListById(parms.PartialId);
+                int count = 0;
                 if (data.result == null)
                 {
                     LambdaLogger.Log($"no data for current search");
@@ -44,8 +44,8 @@ namespace PostCodeApi.Controllers
                 if (data.result.Count > 0)
                 {
                     LambdaLogger.Log($"search data found!!");
-                    GetResponseHeader2Client();
-                    return Ok(data.result);
+                    count = data.result.Count > parms.MaxResultCount ? parms.MaxResultCount : data.result.Count;
+                    return Ok(data.result.GetRange(0, count));
                 }
                 return NotFound("no data found");
             }
@@ -64,41 +64,25 @@ namespace PostCodeApi.Controllers
         /// <param name="fullPostId">full PostCode Id</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("GetAutoCompletePartialPostCode/{fullPostId}")]
-        public async Task<ActionResult> AutocompletePostcodePartial([FromRoute] string fullPostId)
+        [Route("GetAutoCompletePartialPostCode/{FullPostId:minlength(1)}")]
+        public async Task<ActionResult> AutocompletePostcodePartial([FromRoute] AutocompletePostcodePartialRouteParameter parms)
         {
             try
             {
-                var data = await _postCodeRepository.GetPostCodeById(fullPostId);
-                if (data.status == 200)
+                var data = await _postCodeRepository.GetPostCodeById(parms.FullPostId);
+                if (data == null)
                 {
-                    PostCode postCode = new PostCode()
-                    {
-                        country = data.result.country,
-                        adminDistrict = data.result.admin_district,
-                        parliamentaryConstituency = data.result.parliamentary_constituency,
-                        region = data.result.region,
-                        area = _postCodeRepository.GetArea(data.result.latitude)
-                    };
-
-
-                    GetResponseHeader2Client();
-                    return Ok(postCode);
+                    return NotFound($"No Data found with this code ");
                 }
-                return NotFound($"No Data found with this code ");
+                return Ok(data);
+               
             }
             catch (Exception ex)
             {
                 LambdaLogger.Log("Error in AutocompletePostcodePartial API");
-                LambdaLogger.Log("Error Details:"+ex.StackTrace);
+                LambdaLogger.Log("Error Details:" + ex.StackTrace);
                 return NotFound($"Error :Please contact administrator ");
             }
-        }
-        private void GetResponseHeader2Client()
-        {
-            Response.Headers.Add("Access-Control-Allow-Origin", "*");
-            Response.Headers.Add("Content-Type", "application/json");
-            Response.Headers.Add("Access-Control-Allow-Methods", "POST,GET,OPTIONS,PUT,DELETE");
         }
     }
 }

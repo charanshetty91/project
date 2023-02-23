@@ -6,7 +6,6 @@ namespace DataAccess.Repository
     public interface IPostCodeRepository
     {
         Task<PostCodeList> GetAllPostalCodeListById(string partialId);
-        Task<PostCodeData> GetPostCodeById(string fullId);
-        string GetArea(double latitude);
+        Task<PostCode> GetPostCodeById(string fullId);
     }
 }

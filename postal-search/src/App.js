@@ -11,9 +11,10 @@ function App() {
   const [postCodeFullDetails, setPostCodeFullDetails] = useState('');
   const [resultLabel, setResultLabel] = useState('');
   const [details, setDetails] = useState('Details');
+  const resultCount = 8;
 
   const onChange = (event) => {
-    axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/LookupPostcode/' + event.target.value)
+    axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/LookupPostcode/' + event.target.value +'/'+resultCount)
       .then(res => { setSearchInCompleteData(res.data);setPostCodeFullDetails(''); }).catch((er) => {
         setSearchInCompleteData([]);
       });
@@ -48,7 +49,7 @@ function App() {
     searchInCompleteData.map((item, index) => {
       return (<div className="collection-item" key={index} onClick={() => onSearchItemClick(item)} >{item}</div>)
     })
-    : <label>{resultLabel}</label>
+    : <label className='result'>{resultLabel}</label>
 
   return (
 

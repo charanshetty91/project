@@ -4,8 +4,10 @@ using System.IO;
 using System.Reflection.Emit;
 using System.Text.Json;
 using System.Threading.Tasks;
+using AutoMapper;
 using DataAccess.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Xunit;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -18,6 +20,7 @@ namespace PostCodeApi.Tests
     public class PostCodeControllerTests
     {
 
+       
         [Theory]
         [InlineData(0, "SingleChar")]
         [InlineData(1, "NullOrEmpty")]
@@ -40,34 +43,26 @@ namespace PostCodeApi.Tests
                     Assert.Equal(200, response.StatusCode);
                     Assert.Equal("[\"W10 4AA\",\"W10 4AB\",\"W10 4AD\",\"W10 4AE\",\"W10 4AF\",\"W10 4AG\",\"W10 4AH\",\"W10 4AJ\",\"W10 4AL\",\"W10 4AN\"]", response.Body);
 
-                    Assert.True(response.MultiValueHeaders.ContainsKey("Access-Control-Allow-Origin"));
                     Assert.True(response.MultiValueHeaders.ContainsKey("Content-Type"));
-                    Assert.True(response.MultiValueHeaders.ContainsKey("Access-Control-Allow-Methods"));
-
-                    Assert.Equal("*", response.MultiValueHeaders["Access-Control-Allow-Origin"][0]);
                     Assert.Equal("application/json; charset=utf-8", response.MultiValueHeaders["Content-Type"][0]);
-                    Assert.Equal("POST,GET,OPTIONS,PUT,DELETE", response.MultiValueHeaders["Access-Control-Allow-Methods"][0]);
                     break;
 
                 case "FullCode":
                     Assert.Equal(200, response.StatusCode);
                     Assert.Equal("[\"W10 4AN\"]", response.Body);
 
-                    Assert.True(response.MultiValueHeaders.ContainsKey("Access-Control-Allow-Origin"));
                     Assert.True(response.MultiValueHeaders.ContainsKey("Content-Type"));
-                    Assert.True(response.MultiValueHeaders.ContainsKey("Access-Control-Allow-Methods"));
 
-                    Assert.Equal("*", response.MultiValueHeaders["Access-Control-Allow-Origin"][0]);
                     Assert.Equal("application/json; charset=utf-8", response.MultiValueHeaders["Content-Type"][0]);
-                    Assert.Equal("POST,GET,OPTIONS,PUT,DELETE", response.MultiValueHeaders["Access-Control-Allow-Methods"][0]);
                     break;
 
                 case "NullOrEmpty":
-                    Assert.Equal(404, response.StatusCode);
-                    Assert.Equal("no data found", response.Body);
+                    Assert.Equal(400, response.StatusCode);
+                    dynamic result = JsonConvert.DeserializeObject(response.Body);
+                    Assert.Contains("Value cannot be empty or white space.", ((JContainer)result).Last.ToString());
 
                     Assert.True(response.MultiValueHeaders.ContainsKey("Content-Type"));
-                    Assert.Equal("text/plain; charset=utf-8", response.MultiValueHeaders["Content-Type"][0]);
+                    Assert.Equal("application/problem+json; charset=utf-8", response.MultiValueHeaders["Content-Type"][0]);
                     break;
             }
         }
@@ -92,20 +87,21 @@ namespace PostCodeApi.Tests
             {
                 case "Postcode_FullId":
                     Assert.Equal(200, response.StatusCode);
-                    var responseData = JsonSerializer.Deserialize<PostCode>(response.Body);
-                    Assert.Equal("England", responseData.country);
-                    Assert.Equal("Wokingham", responseData.adminDistrict);
-                    Assert.Equal("South", responseData.area);
-                    Assert.Equal("Maidenhead", responseData.parliamentaryConstituency);
-                    Assert.Equal("South East", responseData.region);
+                    var responseData = response.Body;
+                    Assert.Contains("country", responseData);
+                    Assert.Contains("adminDistrict", responseData);
+                    Assert.Contains("region", responseData);
+                    Assert.Contains("parliamentaryConstituency", responseData);
+                    Assert.Contains("area", responseData);
+                    Assert.Contains("England", responseData);
+                    Assert.Contains("Wokingham", responseData);
+                    Assert.Contains("South", responseData);
+                    Assert.Contains("Maidenhead", responseData);
+                    Assert.Contains("South East", responseData);
 
-                    Assert.True(response.MultiValueHeaders.ContainsKey("Access-Control-Allow-Origin"));
                     Assert.True(response.MultiValueHeaders.ContainsKey("Content-Type"));
-                    Assert.True(response.MultiValueHeaders.ContainsKey("Access-Control-Allow-Methods"));
-
-                    Assert.Equal("*", response.MultiValueHeaders["Access-Control-Allow-Origin"][0]);
                     Assert.Equal("application/json; charset=utf-8", response.MultiValueHeaders["Content-Type"][0]);
-                    Assert.Equal("POST,GET,OPTIONS,PUT,DELETE", response.MultiValueHeaders["Access-Control-Allow-Methods"][0]);
+                   
                     break;
 
                 case "Postcode_PartialId":
@@ -116,11 +112,13 @@ namespace PostCodeApi.Tests
                     break;
 
                 case "Postcode_NullOrEmpty":
-                    Assert.Equal(404, response.StatusCode);
-                    Assert.Equal("No Data found with this code ", response.Body);
+                    Assert.Equal(400, response.StatusCode);
+
+                    dynamic result = JsonConvert.DeserializeObject(response.Body);
+                    Assert.Contains("Value cannot be empty or white space.", ((JContainer)result).Last.ToString());
 
                     Assert.True(response.MultiValueHeaders.ContainsKey("Content-Type"));
-                    Assert.Equal("text/plain; charset=utf-8", response.MultiValueHeaders["Content-Type"][0]);
+                    Assert.Equal("application/problem+json; charset=utf-8", response.MultiValueHeaders["Content-Type"][0]);
                     break;
             }
         }

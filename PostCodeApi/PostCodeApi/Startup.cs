@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Helper;
+using DataAccess.Mapper;
 using DataAccess.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,14 +29,16 @@ namespace PostCodeApi
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(o => o.AddPolicy("corsPolicy", builder =>
+            services.AddCors(o => o.AddPolicy("AllowOrigin", builder =>
             {
                 builder.AllowAnyOrigin()
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
             services.AddControllers();
+            services.AddAutoMapper(typeof(Mapper));
             services.AddTransient<IPostCodeRepository, PostCodeRepository>();
+            services.AddTransient<IAreaFinder, AreaFinder>();
             services.AddSwaggerGen();
         }
 
@@ -45,6 +49,7 @@ namespace PostCodeApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            
 
             app
                 .UseSwagger()
@@ -62,7 +67,7 @@ namespace PostCodeApi
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseCors(options => options.AllowAnyOrigin());
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
