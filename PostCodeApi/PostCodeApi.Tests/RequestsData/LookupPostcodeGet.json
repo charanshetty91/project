@@ -2,12 +2,12 @@
 
   {
     "resource": "/{proxy+}",
-    "path": "/api/PostCode/GetAutoCompletePartialPostCode/w",
+    "path": "/api/PostCode/GetAutoCompletePartialPostCode/w/8",
     "httpMethod": "GET",
     "headers": null,
     "queryStringParameters": null,
     "pathParameters": {
-      "proxy": "api/PostCode/LookupPostcode/w"
+      "proxy": "api/PostCode/LookupPostcode/w/8"
     },
     "stageVariables": null,
     "requestContext": {
@@ -37,12 +37,12 @@
 
   {
     "resource": "/{proxy+}",
-    "path": "/api/PostCode/LookupPostcode/ ",
+    "path": "/api/PostCode/LookupPostcode/ /1",
     "httpMethod": "GET",
     "headers": null,
     "queryStringParameters": null,
     "pathParameters": {
-      "proxy": "api/PostCode/LookupPostcode/ "
+      "proxy": "api/PostCode/LookupPostcode/ /1"
     },
     "stageVariables": null,
     "requestContext": {
@@ -71,12 +71,12 @@
   },
   {
     "resource": "/{proxy+}",
-    "path": "/api/PostCode/LookupPostcode/W10 4AN",
+    "path": "/api/PostCode/LookupPostcode/W10 4AN/5",
     "httpMethod": "GET",
     "headers": null,
     "queryStringParameters": null,
     "pathParameters": {
-      "proxy": "api/PostCode/LookupPostcode/W10 4AN"
+      "proxy": "api/PostCode/LookupPostcode/W10 4AN/5"
     },
     "stageVariables": null,
     "requestContext": {

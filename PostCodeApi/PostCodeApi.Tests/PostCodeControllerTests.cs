@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AutoMapper;
+using DataAccess.Constants;
 using DataAccess.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -41,7 +42,7 @@ namespace PostCodeApi.Tests
             {
                 case "SingleChar":
                     Assert.Equal(200, response.StatusCode);
-                    Assert.Equal("[\"W10 4AA\",\"W10 4AB\",\"W10 4AD\",\"W10 4AE\",\"W10 4AF\",\"W10 4AG\",\"W10 4AH\",\"W10 4AJ\",\"W10 4AL\",\"W10 4AN\"]", response.Body);
+                    Assert.Equal("{\"W10 4AA\":\"South\",\"W10 4AB\":\"South\",\"W10 4AD\":\"South\",\"W10 4AE\":\"South\",\"W10 4AF\":\"South\",\"W10 4AG\":\"South\",\"W10 4AH\":\"South\",\"W10 4AJ\":\"South\"}", response.Body);
 
                     Assert.True(response.MultiValueHeaders.ContainsKey("Content-Type"));
                     Assert.Equal("application/json; charset=utf-8", response.MultiValueHeaders["Content-Type"][0]);
@@ -49,7 +50,7 @@ namespace PostCodeApi.Tests
 
                 case "FullCode":
                     Assert.Equal(200, response.StatusCode);
-                    Assert.Equal("[\"W10 4AN\"]", response.Body);
+                    Assert.Equal("{\"W10 4AN\":\"South\"}", response.Body);
 
                     Assert.True(response.MultiValueHeaders.ContainsKey("Content-Type"));
 
@@ -106,7 +107,7 @@ namespace PostCodeApi.Tests
 
                 case "Postcode_PartialId":
                     Assert.Equal(404, response.StatusCode);
-                    Assert.Equal("No Data found with this code ", response.Body);
+                    Assert.Equal(Constants.NoDataMessage, response.Body);
                     Assert.True(response.MultiValueHeaders.ContainsKey("Content-Type"));
                     Assert.Equal("text/plain; charset=utf-8", response.MultiValueHeaders["Content-Type"][0]);
                     break;

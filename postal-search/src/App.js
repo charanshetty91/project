@@ -7,26 +7,26 @@ import ResultTable from './component/result-table'
 
 function App() {
   const [value, setValue] = useState("");
-  const [searchInCompleteData, setSearchInCompleteData] = useState([]);
+  const [searchInCompleteData, setSearchInCompleteData] = useState({});
   const [postCodeFullDetails, setPostCodeFullDetails] = useState('');
   const [resultLabel, setResultLabel] = useState('');
   const [details, setDetails] = useState('Details');
   const resultCount = 8;
 
   const onChange = (event) => {
-    axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/LookupPostcode/' + event.target.value +'/'+resultCount)
-      .then(res => { setSearchInCompleteData(res.data);setPostCodeFullDetails(''); }).catch((er) => {
-        setSearchInCompleteData([]);
+      axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/LookupPostcode/' + event.target.value +'/'+resultCount)
+      .then(res => { setSearchInCompleteData(Object.entries(res.data).map(([key]) => key ));setPostCodeFullDetails(''); }).catch((er) => {
+        setSearchInCompleteData({});
       });
     setResultLabel("loading...")
     setValue(event.target.value);
   }
 
   const onSearch = (searchText) => {
-    setSearchInCompleteData([]);
+    setSearchInCompleteData({});
     setResultLabel("")
     try {
-      axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/GetAutoCompletePartialPostCode/' + searchText)
+        axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/GetAutoCompletePartialPostCode/' + searchText)
         .then(res => { setDetails('Details'); setPostCodeFullDetails(res.data);}).catch((err) => {
           setDetails('No data found')
           setPostCodeFullDetails('');
@@ -42,7 +42,7 @@ function App() {
   const onSearchItemClick = (item) => {
     setResultLabel("")
     setValue(item);
-    setSearchInCompleteData([]);
+    setSearchInCompleteData({});
 
   }
   const searchResult = searchInCompleteData.length ?

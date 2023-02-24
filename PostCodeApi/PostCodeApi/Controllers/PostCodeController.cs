@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using DataAccess.Constants;
 using Microsoft.AspNetCore.Cors;
 
 namespace PostCodeApi.Controllers
@@ -28,33 +29,27 @@ namespace PostCodeApi.Controllers
         /// <param name="partialId">partial Id</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("LookupPostcode/{PartialId:minlength(1)}/{MaxResultCount:int}")]
+        [Route("LookupPostcode/{PartialId:minlength(1)}/{MaxResultCount:int:min(0)}")]
         public async Task<IActionResult> LookupPostcode([FromRoute] LookupPostcodeRouteParameter parms)
         {
             try
             {
                 LambdaLogger.Log("LookupPostcode search started !!");
-                var data = await _postCodeRepository.GetAllPostalCodeListById(parms.PartialId);
-                int count = 0;
-                if (data.result == null)
+                var data = await _postCodeRepository.GetAllPostalCodeListById(parms);
+                if (data == null)
                 {
                     LambdaLogger.Log($"no data for current search");
-                    return NotFound("no data found");
+                    return NotFound(Constants.NoDataMessage);
                 }
-                if (data.result.Count > 0)
-                {
-                    LambdaLogger.Log($"search data found!!");
-                    count = data.result.Count > parms.MaxResultCount ? parms.MaxResultCount : data.result.Count;
-                    return Ok(data.result.GetRange(0, count));
-                }
-                return NotFound("no data found");
+                LambdaLogger.Log($"search data found!!");
+                return Ok(data);
             }
 
             catch (Exception ex)
             {
                 LambdaLogger.Log("Error in LookupPostcode API");
                 LambdaLogger.Log("Error details:" + ex.StackTrace);
-                return NotFound($"Error :Please contact administrator ");
+                return NotFound(Constants.ExceptionErrorMessage);
             }
         }
 
@@ -72,16 +67,16 @@ namespace PostCodeApi.Controllers
                 var data = await _postCodeRepository.GetPostCodeById(parms.FullPostId);
                 if (data == null)
                 {
-                    return NotFound($"No Data found with this code ");
+                    return NotFound(Constants.NoDataMessage);
                 }
                 return Ok(data);
-               
+
             }
             catch (Exception ex)
             {
                 LambdaLogger.Log("Error in AutocompletePostcodePartial API");
                 LambdaLogger.Log("Error Details:" + ex.StackTrace);
-                return NotFound($"Error :Please contact administrator ");
+                return NotFound(Constants.ExceptionErrorMessage);
             }
         }
     }

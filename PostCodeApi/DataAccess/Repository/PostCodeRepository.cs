@@ -28,12 +28,33 @@ namespace DataAccess.Repository
         /// </summary>
         /// <param name="partialId">partial Id</param>
         /// <returns></returns>
-        public async Task<PostCodeList> GetAllPostalCodeListById(string partialId)
+        public async Task<Dictionary<string, string>> GetAllPostalCodeListById(LookupPostcodeRouteParameter lookupPostcodeRouteParameter)
         {
-            var requestUri = $"{partialId}/autocomplete";
-            var responseData = await ResponseData(requestUri);
-            PostCodeList postCodeList = JsonConvert.DeserializeObject<PostCodeList>(responseData);
-            return postCodeList;
+            try
+            {
+                var requestUri = $"{lookupPostcodeRouteParameter.PartialId}/autocomplete";
+                var responseData = await ResponseData(requestUri);
+                PostCodeList postCodeList = JsonConvert.DeserializeObject<PostCodeList>(responseData);
+
+                if (postCodeList != null && postCodeList.Result?.Count > 0)
+                {
+                    var postCodeDetail =  GetPostCodeById(postCodeList.Result[0]);
+                    int count = postCodeList.Result.Count > lookupPostcodeRouteParameter.MaxResultCount ? lookupPostcodeRouteParameter.MaxResultCount : postCodeList.Result.Count;
+                    var displayResult = postCodeList.Result.GetRange(0, count);
+                    Dictionary<string, string> postCodesWithArea = new Dictionary<string, string>();
+                    foreach (var key in displayResult)
+                    {
+                        postCodesWithArea[key] = postCodeDetail.Result.Area;
+                    }
+                    return postCodesWithArea;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.StackTrace);
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -57,7 +78,7 @@ namespace DataAccess.Repository
         }
         private static async Task<string> ResponseData(string requestUri)
         {
-            var client =new HttpClient
+            var client = new HttpClient
             {
                 BaseAddress = new Uri(ConstantsData.ApiLink)
             };
@@ -66,6 +87,6 @@ namespace DataAccess.Repository
             return responseData;
         }
 
-       
+
     }
 }

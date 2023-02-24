@@ -18,5 +18,8 @@ namespace DataAccess.Constants
 
         public static readonly string Midlands = "Midlands";
 
+        public static readonly  string NoDataMessage= "No data found";
+
+        public static readonly string ExceptionErrorMessage = "Error in result-Please contact administrator!!";
     }
 }

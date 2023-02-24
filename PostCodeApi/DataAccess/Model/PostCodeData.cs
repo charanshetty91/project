@@ -12,7 +12,7 @@ namespace DataAccess.Model
         [JsonProperty(PropertyName = "status")]
         public int Status { get; set; }
 
-        [JsonProperty(PropertyName = "result")]
+        [JsonProperty(PropertyName = "Result")]
         public Result Result { get; set; }
 
 
