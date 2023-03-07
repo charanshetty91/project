@@ -14,7 +14,7 @@ function App() {
   const resultCount = 8;
 
   const onChange = (event) => {
-      axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/LookupPostcode/' + event.target.value +'/'+resultCount)
+      axios.get('https://amcoxw4493.execute-api.eu-central-1.amazonaws.com/Prod/api/PostCode/LookupPostcode/' + event.target.value)
       .then(res => { setSearchInCompleteData(Object.entries(res.data).map(([key]) => key ));setPostCodeFullDetails(''); }).catch((er) => {
         setSearchInCompleteData({});
       });
