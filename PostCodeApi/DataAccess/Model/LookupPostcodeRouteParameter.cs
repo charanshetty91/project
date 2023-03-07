@@ -12,6 +12,5 @@ namespace DataAccess.Model
         [NotNullOrWhiteSpaceValidator]
         public string PartialId { get; set; }
 
-        public int MaxResultCount { get; set; }
     }
 }

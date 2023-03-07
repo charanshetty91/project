@@ -6,8 +6,10 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using DataAccess.Configurations;
 using DataAccess.Helper;
 using DataAccess.Model;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using ConstantsData = DataAccess.Constants.Constants;
 namespace DataAccess.Repository
@@ -16,11 +18,13 @@ namespace DataAccess.Repository
     {
         private readonly IMapper _mapper;
         private readonly IAreaFinder _areaFinder;
+        private readonly IOptions<AppConfigurations> _config;
 
-        public PostCodeRepository(IMapper mapper, IAreaFinder areaFinder)
+        public PostCodeRepository(IMapper mapper, IAreaFinder areaFinder, IOptions<AppConfigurations> config)
         {
             _mapper = mapper;
             _areaFinder = areaFinder;
+            _config = config;
         }
 
         /// <summary>
@@ -39,7 +43,7 @@ namespace DataAccess.Repository
                 if (postCodeList != null && postCodeList.Result?.Count > 0)
                 {
                     var postCodeDetail =  GetPostCodeById(postCodeList.Result[0]);
-                    int count = postCodeList.Result.Count > lookupPostcodeRouteParameter.MaxResultCount ? lookupPostcodeRouteParameter.MaxResultCount : postCodeList.Result.Count;
+                    int count = postCodeList.Result.Count > _config.Value.MaxResultCount ? _config.Value.MaxResultCount : postCodeList.Result.Count;
                     var displayResult = postCodeList.Result.GetRange(0, count);
                     Dictionary<string, string> postCodesWithArea = new Dictionary<string, string>();
                     foreach (var key in displayResult)

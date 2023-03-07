@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Configurations;
 using DataAccess.Helper;
 using DataAccess.Mapper;
 using DataAccess.Repository;
@@ -37,6 +38,7 @@ namespace PostCodeApi
             }));
             services.AddControllers();
             services.AddAutoMapper(typeof(Mapper));
+            services.Configure<AppConfigurations>(Configuration.GetSection("AppDetails"));
             services.AddTransient<IPostCodeRepository, PostCodeRepository>();
             services.AddTransient<IAreaFinder, AreaFinder>();
             services.AddSwaggerGen();
@@ -45,6 +47,12 @@ namespace PostCodeApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+            Configuration = builder.Build();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

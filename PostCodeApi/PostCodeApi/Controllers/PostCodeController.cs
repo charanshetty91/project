@@ -3,7 +3,6 @@ using DataAccess.Model;
 using DataAccess.Repository;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using DataAccess.Constants;
 using Microsoft.AspNetCore.Cors;
@@ -29,7 +28,7 @@ namespace PostCodeApi.Controllers
         /// <param name="partialId">partial Id</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("LookupPostcode/{PartialId:minlength(1)}/{MaxResultCount:int:min(0)}")]
+        [Route("LookupPostcode/{PartialId:minlength(1)}")]
         public async Task<IActionResult> LookupPostcode([FromRoute] LookupPostcodeRouteParameter parms)
         {
             try
